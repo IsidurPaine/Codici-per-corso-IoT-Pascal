@@ -1,0 +1,8 @@
+{
+    "broker": "localhost",
+    "port": 2883,
+    "username": "",
+    "password": "",
+    "SERIAL_COM_PORT": "COM5",
+    "SERIAL_DATARATE": 9600
+}
