@@ -36,7 +36,7 @@ def read_parameters(file_path):
         with open(file_path, 'r') as file:
             params = json.load(file)
         broker = params['broker'] # Indirizzo del broker MQTT
-        port = params['port'] # Porta del broker MQTT
+        port = 1883 #params['port'] # Porta del broker MQTT
         username = params['username'] # Inserisci il tuo username di shiftr.io
         password = params['password'] # Inserisci la tua password di shiftr.io
     except FileNotFoundError:

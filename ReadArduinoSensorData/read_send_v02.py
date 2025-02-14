@@ -96,7 +96,7 @@ def read_from_serial(serial_port):
 # Funzione principale
 def main():
     
-    read_parameters(parameters_file) # Leggi i parametri dal file JSON
+    read_parameters(parameters_file) # Leggi i parametri dal file JSON per la connessione MQTT e la porta seriale
     
     # Inizializza il client MQTT
     client = mqtt.Client() # Crea un'istanza del client MQTT

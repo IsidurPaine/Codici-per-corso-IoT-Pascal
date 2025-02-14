@@ -62,16 +62,27 @@ try:
             line_temperature_celsius = line.split(", ")[1].split(" ")[2].split("°")[0]
             print(f"Temperatura: {line_temperature_celsius} C") # Stampa la temperatura
             
+            # Creazione di altri messaggi per pubblicare i dati sugli altri topic
             line_temperature_fahrenheit = line.split(", ")[1].split(" ")[4].split("°")[0]
             print(f"Temperatura: {line_temperature_fahrenheit} F") # Stampa la temperatura
+
+            line_humidity = line.split(", ")[3].split(" ")[2].split("%")[0]
+            print(f"Umidità: {line_humidity} %") # Stampa l'umidità
+
+            line_idc_celsius = line.split(", ")[2].split(" ")[2].split("°")[0]
+            print(f"IdC: {line_idc_celsius} C")
+
+            line_idc_fahrenheit = line.split(", ")[2].split(" ")[4].split("°")[0]
+            print(f"IdC: {line_idc_fahrenheit} F")
             
             # Pubblica il messaggio MQTT
-            client.publish(topic_temp_C, line_temperature_celsius) # Invia la temperatura al topic 'temperature'
-            client.publish(topic_temp_F, line_temperature_fahrenheit) # Invia la temperatura al topic 'temperature'
-            
-            #TODO: Creare un altro topic dove pubblicare dati
-            
-            #time.sleep(1) # Ritardo di 1 secondo
+            client.publish(topic_temp_C, line_temperature_celsius) # Invia la temperatura al topic 'temperature_C'
+            client.publish(topic_temp_F, line_temperature_fahrenheit) # Invia la temperatura al topic 'temperature_F'
+            client.publish(topic_humidity, line_humidity) # Invia l'umidità al topic 'humidity'
+            client.publish(topic_idc_C, line_idc_celsius) # Invia l'umidità al topic 'idc_C'
+            client.publish(topic_idc_F, line_idc_fahrenheit) # Invia l'umidità al topic 'idc_F'
+                        
+            time.sleep(1) # Ritardo di 1 secondo
 except KeyboardInterrupt:
     print("Interruzione manuale") # Stampa un messaggio di interruzione manuale
 finally:
