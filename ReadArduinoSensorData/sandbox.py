@@ -56,7 +56,7 @@ def generate_random_data():
         "Humidity": round(random.uniform(20.0, 80.0), 2),
         "Temperature": round(random.uniform(10.0, 30.0), 2),
         "IdC": round(random.uniform(15.0, 35.0), 2)
-    }
+    } # Dizionario contenente i dati casuali
     return data_dict
 
 
@@ -95,3 +95,4 @@ def main():
 # Avvio del programma
 if __name__ == "__main__":
     main()  # Chiama la funzione principale per avviare il programma
+    

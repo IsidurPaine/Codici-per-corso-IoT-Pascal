@@ -29,11 +29,11 @@ broker = "localhost" # Indirizzo del broker MQTT
 port = 2883 # Porta di default per MQTT
 username = ""  # Inserisci il tuo username di shiftr.io
 password = ""  # Inserisci la tua password di shiftr.io
-topic_temp_C = "temperatura_C" # Topic MQTT in cui inviare i dati
-topic_temp_F = "temperature_F" # Topic MQTT in cui inviare i dati
-topic_humidity = "humidity" # Topic MQTT in cui inviare i dati
-topic_idc_C = "idc_C" # Topic MQTT in cui inviare i dati
-topic_idc_F = "idc_F" # Topic MQTT in cui inviare i dati
+topic_temp_C = "Temperatura_C" # Topic MQTT in cui inviare i dati
+topic_temp_F = "Temperature_F" # Topic MQTT in cui inviare i dati
+topic_humidity = "Humidity" # Topic MQTT in cui inviare i dati
+topic_idc_C = "IdC_C" # Topic MQTT in cui inviare i dati
+topic_idc_F = "IdC_F" # Topic MQTT in cui inviare i dati
 
 # Funzione callback per la connessione
 def on_connect(client, userdata, flags, rc):
@@ -56,6 +56,10 @@ try:
             line = ser.readline().decode('utf-8').rstrip() # Rimuovi i caratteri di newline e carriage return
             print(line) # Stampa la linea letta
             # Controllo della stringa per mandare solo il dato di temperatura in gradi celsius
+            
+            line_humidity = line.split(", ")[0].split(" ")[1].split("%")[0]
+            print(f"Umidità: {line_humidity} %") # Stampa l'umidità
+
             # Dalla stringa ricevuta, estrai la parte della temperatura (primo slit)
             # da cui estraggo solo la parte in gradi celsius eliminando (secondo split)
             # il simbolo °C (terzo split)
@@ -63,16 +67,13 @@ try:
             print(f"Temperatura: {line_temperature_celsius} C") # Stampa la temperatura
             
             # Creazione di altri messaggi per pubblicare i dati sugli altri topic
-            line_temperature_fahrenheit = line.split(", ")[1].split(" ")[4].split("°")[0]
+            line_temperature_fahrenheit = line.split(", ")[1].split(" ")[3].split("°")[0]
             print(f"Temperatura: {line_temperature_fahrenheit} F") # Stampa la temperatura
-
-            line_humidity = line.split(", ")[3].split(" ")[2].split("%")[0]
-            print(f"Umidità: {line_humidity} %") # Stampa l'umidità
 
             line_idc_celsius = line.split(", ")[2].split(" ")[2].split("°")[0]
             print(f"IdC: {line_idc_celsius} C")
 
-            line_idc_fahrenheit = line.split(", ")[2].split(" ")[4].split("°")[0]
+            line_idc_fahrenheit = line.split(", ")[2].split(" ")[3].split("°")[0]
             print(f"IdC: {line_idc_fahrenheit} F")
             
             # Pubblica il messaggio MQTT

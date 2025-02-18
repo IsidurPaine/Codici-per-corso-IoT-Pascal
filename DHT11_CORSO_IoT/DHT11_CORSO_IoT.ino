@@ -1,9 +1,9 @@
 /*
-  Questo programma legge il valore della temperatura da un sensore SHT11 
+  Questo programma legge il valore della temperatura da un sensore DHT11 
   connesso al pin digitale 3 della scheda Arduino Uno e lo stampa sulla porta seriale ogni secondo.
   
   Setup:
-  - Connettere il pin dati del sensore SHT11 al pin digitale 3 della scheda Arduino.
+  - Connettere il pin dati del sensore SHT11 al pin digitale 2 della scheda Arduino.
   - Collegare VCC e GND del sensore SHT11 rispettivamente ai pin 5V e GND della scheda Arduino.
   - Caricare questo sketch sulla scheda Arduino.
   - Aprire il monitor seriale per visualizzare i valori della temperatura letti dal sensore.
