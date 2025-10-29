@@ -10,6 +10,8 @@
 # Questo script legge i dati dalla porta seriale e li invia al broker MQTT                #
 # tramite il protocollo MQTT. I messaggi MQTT contengono le singole letture               #
 # dal sensore di temperatura collegato alla porta seriale.                                #
+# Per leggere i singoli valori delle variabili, il programma utilizza le                  #
+# espressioni regolari.                                                                   #
 #                                                                                         #
 # Per eseguire questo script, è necessario installare la libreria paho-mqtt e pyserial.   #
 # Puoi installare le libreria eseguendo il seguente comando:                              #

@@ -11,106 +11,114 @@
 # I dati simulati includono umidità, temperatura in Celsius e Fahrenheit, e IDC.        #
 #########################################################################################
 
+
 # Importa le librerie necessarie
-import time  # importa il modulo time per funzioni di temporizzazione come sleep
-import matplotlib.pyplot as plt  # importa pyplot di matplotlib per la creazione di grafici
-from collections import deque  # importa deque per buffer a lunghezza fissa
-import math  # importa il modulo math per funzioni matematiche (es. sin)
-import random  # importa random per generare rumore casuale
+import math  # fornisce funzioni matematiche come sin, cos, ecc.
+import matplotlib.pyplot as plt  # modulo per la creazione di grafici
+import random  # fornisce funzioni per generare numeri casuali
+import time  # fornisce funzioni legate al tempo come sleep
+
+from collections import deque  # importa deque per buffer a lunghezza limitata
 
 
-# Definisce il numero massimo di punti dati da memorizzare
-max_len = 100  # numero massimo di elementi che ogni deque può contenere
+# Funzioni di utilità per la gestione dei dati e dei grafici
+def init_data_buffers(max_len=100):  # definisce una funzione per inizializzare i buffer dei dati
+    """Inizializza i buffer di dati"""  # docstring che descrive la funzione
+    return {  # restituisce un dizionario contenente i buffer per ogni tipo di dato
+        'humidity': deque(maxlen=max_len),  # buffer per umidità con dimensione massima max_len
+        'temp_c': deque(maxlen=max_len),  # buffer per temperatura in Celsius
+        'temp_f': deque(maxlen=max_len),  # buffer per temperatura in Fahrenheit
+        'idc_c': deque(maxlen=max_len),  # buffer per IdC in Celsius
+        'idc_f': deque(maxlen=max_len)  # buffer per IdC in Fahrenheit
+    }
 
-# Crea oggetti deque (buffer a dimensione fissa) per ogni tipo di dato
-humidity_data = deque(maxlen=max_len)        # Memorizza valori di umidità
-temperature_c_data = deque(maxlen=max_len)   # Memorizza valori di temperatura Celsius
-temperature_f_data = deque(maxlen=max_len)   # Memorizza valori di temperatura Fahrenheit
-idc_c_data = deque(maxlen=max_len)           # Memorizza valori IDC Celsius
-idc_f_data = deque(maxlen=max_len)           # Memorizza valori IDC Fahrenheit
+# Funzione per inizializzare i grafici
+def init_plots():  # definisce una funzione per inizializzare i grafici
+    """Inizializza i grafici"""  # docstring che descrive la funzione
+    plt.ion()  # abilita la modalità interattiva di Matplotlib per aggiornamenti dinamici
+    fig, axs = plt.subplots(2, 2, figsize=(12, 8))  # crea una figura con una griglia 2x2 di assi
+    fig.suptitle('Dati Sensore Sintetici in Tempo Reale')  # imposta il titolo principale della figura
+    return fig, axs  # restituisce la figura e gli assi creati
 
+# Funzione per aggiornare i grafici con nuovi dati
+def update_plots(axs, data_buffers):  # definisce la funzione per aggiornare i grafici con nuovi dati
+    """Aggiorna tutti i grafici"""  # docstring che descrive la funzione
+    # Umidità
+    axs[0, 0].clear()  # pulisce l'asse in posizione (0,0) prima di ridisegnare
+    axs[0, 0].plot(list(data_buffers['humidity']), label='Umidità (%)', color='blue')  # disegna la serie di umidità
+    axs[0, 0].legend(loc='upper right')  # mostra la legenda in alto a destra
+    axs[0, 0].set_title('Umidità')  # imposta il titolo dell'asse umidità
 
-# Abilita la modalità interattiva per matplotlib
-plt.ion()  # attiva l'interactive mode per aggiornare i grafici senza bloccare l'esecuzione
-# Crea una figura con sottografici 2x2
-fig, axs = plt.subplots(2, 2, figsize=(12, 8))  # crea figura e array 2x2 di assi con dimensione specifica
-# Imposta il titolo principale per l'intera figura
-fig.suptitle('Dati Sensore Sintetici in Tempo Reale')  # titolo generale della figura
+    # Temperatura Celsius
+    axs[0, 1].clear()  # pulisce l'asse in posizione (0,1)
+    axs[0, 1].plot(list(data_buffers['temp_c']), label='Temperatura (°C)', color='red')  # disegna la serie temp C
+    axs[0, 1].legend(loc='upper right')  # mostra la legenda in alto a destra
+    axs[0, 1].set_title('Temperatura Celsius')  # imposta il titolo dell'asse temp C
 
-# Funzione per aggiornare tutti e quattro i grafici
-def update_plots():  # definisce la funzione che ridisegna i 4 subplot
-    # Aggiorna il grafico dell'umidità (in alto a sinistra)
-    axs[0, 0].clear()  # pulisce l'asse prima di ridisegnare
-    axs[0, 0].plot(list(humidity_data), label='Umidità (%)', color='blue')  # disegna i dati di umidità
-    axs[0, 0].legend(loc='upper right')  # aggiunge legenda in alto a destra
-    axs[0, 0].set_title('Umidità')  # imposta il titolo del subplot
+    # Temperatura Fahrenheit
+    axs[1, 0].clear()  # pulisce l'asse in posizione (1,0)
+    axs[1, 0].plot(list(data_buffers['temp_f']), label='Temperatura (°F)', color='orange')  # disegna la serie temp F
+    axs[1, 0].legend(loc='upper right')  # mostra la legenda in alto a destra
+    axs[1, 0].set_title('Temperatura Fahrenheit')  # imposta il titolo dell'asse temp F
 
-    # Aggiorna il grafico della temperatura Celsius (in alto a destra)
-    axs[0, 1].clear()  # pulisce l'asse della temperatura Celsius
-    axs[0, 1].plot(list(temperature_c_data), label='Temperatura (°C)', color='red')  # disegna temperatura Celsius
-    axs[0, 1].legend(loc='upper right')  # mostra legenda
-    axs[0, 1].set_title('Temperatura Celsius')  # titolo del subplot
+    # IDC Celsius
+    axs[1, 1].clear()  # pulisce l'asse in posizione (1,1)
+    axs[1, 1].plot(list(data_buffers['idc_c']), label='IdC (°C)', color='green')  # disegna la serie IdC C
+    axs[1, 1].legend(loc='upper right')  # mostra la legenda in alto a destra
+    axs[1, 1].set_title('IdC Celsius')  # imposta il titolo dell'asse IdC C
 
-    # Aggiorna il grafico della temperatura Fahrenheit (in basso a sinistra)
-    axs[1, 0].clear()  # pulisce l'asse della temperatura Fahrenheit
-    axs[1, 0].plot(list(temperature_f_data), label='Temperatura (°F)', color='orange')  # disegna temperatura Fahrenheit
-    axs[1, 0].legend(loc='upper right')  # mostra legenda
-    axs[1, 0].set_title('Temperatura Fahrenheit')  # titolo del subplot
+    plt.tight_layout(rect=[0, 0, 1, 0.96])  # ottimizza il layout per evitare sovrapposizioni con il suptitle
+    plt.pause(0.1)  # pausa breve per permettere a Matplotlib di aggiornare la finestra
 
-    # Aggiorna il grafico IDC Celsius (in basso a destra)
-    axs[1, 1].clear()  # pulisce l'asse IDC Celsius
-    axs[1, 1].plot(list(idc_c_data), label='IdC (°C)', color='green')  # disegna i dati IdC Celsius
-    axs[1, 1].legend(loc='upper right')  # mostra legenda
-    axs[1, 1].set_title('IdC Celsius')  # titolo del subplot
+# Funzione per generare dati sintetici
+def generate_synthetic_data(t):  # definisce la funzione che genera dati sintetici basati sul tempo t
+    """Genera dati sintetici basati sul tempo"""  # docstring che descrive la funzione
+    humidity = 50 + 10 * math.sin(t / 10) + random.uniform(-2, 2)  # genera umidità come sinusoide più rumore casuale
+    temp_c = 25 + 5 * math.sin(t / 15) + random.uniform(-0.5, 0.5)  # genera temperatura Celsius con oscillazione e rumore
+    temp_f = temp_c * 9 / 5 + 32  # converte la temperatura da Celsius a Fahrenheit
+    idc_c = 32 + 2 * math.sin(t / 20) + random.uniform(-0.3, 0.3)  # genera IdC in Celsius con piccole variazioni
+    idc_f = idc_c * 9 / 5 + 32  # converte IdC da Celsius a Fahrenheit
+    return humidity, temp_c, temp_f, idc_c, idc_f  # restituisce tutti i valori generati
 
-    # Regola il layout e aggiorna il display
-    plt.tight_layout(rect=[0, 0, 1, 0.96])  # aggiorna il layout per evitare sovrapposizioni tenendo conto del titolo
-    plt.pause(0.1)  # brevemente pausa per permettere a matplotlib di ridisegnare
+# Funzione per stampare i dati sulla console
+def print_data(humidity, temp_c, temp_f, idc_c, idc_f):  # definisce la funzione per stampare i dati su console
+    """Stampa i dati sulla console"""  # docstring che descrive la funzione
+    print(f"Umidità: {humidity:.2f} %")  # stampa l'umidità con due decimali
+    print(f"Temperatura: {temp_c:.2f} C")  # stampa la temperatura in Celsius con due decimali
+    print(f"Temperatura: {temp_f:.2f} F")  # stampa la temperatura in Fahrenheit con due decimali
+    print(f"IdC: {idc_c:.2f} C")  # stampa IdC in Celsius con due decimali
+    print(f"IdC: {idc_f:.2f} F")  # stampa IdC in Fahrenheit con due decimali
 
-# Funzione per generare dati sintetici variabili nel tempo
-def generate_synthetic_data(t):  # definisce la funzione che genera i valori simulati in base al tempo t
-    # Umidità oscillante con rumore casuale (40-60%)
-    humidity = 50 + 10 * math.sin(t / 10) + random.uniform(-2, 2)  # valore medio 50 con ampiezza e rumore
-    # Temperatura Celsius oscillante (20-30°C)
-    temp_c = 25 + 5 * math.sin(t / 15) + random.uniform(-0.5, 0.5)  # temperatura in °C con oscillazione e rumore
-    # Converti temperatura in Fahrenheit
-    temp_f = temp_c * 9 / 5 + 32  # conversione da °C a °F
-    # IDC Celsius fittizio (30-35°C)
-    idc_c = 32 + 2 * math.sin(t / 20) + random.uniform(-0.3, 0.3)  # valore IdC in °C simulato
-    # IDC Fahrenheit corrispondente
-    idc_f = idc_c * 9 / 5 + 32  # conversione IdC in °F
+# Funzione principale
+def main():  # definisce la funzione principale dell'applicazione
+    """Funzione principale"""  # docstring che descrive la funzione principale
+    data_buffers = init_data_buffers()  # inizializza i buffer dei dati con la dimensione di default
+    fig, axs = init_plots()  # crea la figura e gli assi per i grafici
+    t = 0  # inizializza il contatore temporale a zero
 
-    return humidity, temp_c, temp_f, idc_c, idc_f  # restituisce la tupla dei valori generati
+    try:  # blocco try per consentire la gestione di KeyboardInterrupt
+        while True:  # loop infinito per generare, memorizzare e visualizzare i dati in tempo reale
+            humidity, temp_c, temp_f, idc_c, idc_f = generate_synthetic_data(t)  # genera nuovi dati sintetici
+            print_data(humidity, temp_c, temp_f, idc_c, idc_f)  # stampa i dati generati sulla console
 
-t = 0  # indice temporale iniziale
+            # Aggiorna i buffer
+            data_buffers['humidity'].append(humidity)  # aggiunge il nuovo valore di umidità al buffer
+            data_buffers['temp_c'].append(temp_c)  # aggiunge il nuovo valore di temp C al buffer
+            data_buffers['temp_f'].append(temp_f)  # aggiunge il nuovo valore di temp F al buffer
+            data_buffers['idc_c'].append(idc_c)  # aggiunge il nuovo valore di IdC C al buffer
+            data_buffers['idc_f'].append(idc_f)  # aggiunge il nuovo valore di IdC F al buffer
 
-try:  # inizio blocco try per gestire interruzione da tastiera
-    while True:  # ciclo principale infinito per generare e visualizzare dati in tempo reale
-        # Genera nuovi dati sintetici
-        humidity, temp_c, temp_f, idc_c, idc_f = generate_synthetic_data(t)  # chiama la funzione di generazione
+            update_plots(axs, data_buffers)  # aggiorna i grafici con i dati correnti
+            time.sleep(1)  # attende 1 secondo prima dell'iterazione successiva
+            t += 1  # incrementa il contatore temporale
 
-        # Stampa i valori generati in console
-        print(f"Umidità: {humidity:.2f} %")  # stampa umidità formattata con 2 decimali
-        print(f"Temperatura: {temp_c:.2f} C")  # stampa temperatura in °C
-        print(f"Temperatura: {temp_f:.2f} F")  # stampa temperatura in °F
-        print(f"IdC: {idc_c:.2f} C")  # stampa IdC in °C
-        print(f"IdC: {idc_f:.2f} F")  # stampa IdC in °F
+    except KeyboardInterrupt:  # intercetta l'interruzione manuale (Ctrl+C)
+        print("Interruzione manuale")  # notifica l'utente dell'interruzione
 
-        # Aggiunge i nuovi valori ai rispettivi deque
-        humidity_data.append(humidity)  # inserisce umidità nel buffer circolare
-        temperature_c_data.append(temp_c)  # inserisce temperatura °C nel buffer
-        temperature_f_data.append(temp_f)  # inserisce temperatura °F nel buffer
-        idc_c_data.append(idc_c)  # inserisce IdC °C nel buffer
-        idc_f_data.append(idc_f)  # inserisce IdC °F nel buffer
+    finally:  # blocco finally eseguito comunque per pulire le risorse
+        plt.ioff()  # disabilita la modalità interattiva di Matplotlib
+        plt.show()  # mostra la figura finale in modalità bloccante
 
-        # Aggiorna tutti i grafici con i nuovi dati
-        update_plots()  # richiama la funzione che ridisegna i plot
-        time.sleep(1)  # attende 1 secondo prima della prossima iterazione
-        t += 1  # incrementa l'indice temporale
-
-except KeyboardInterrupt:  # cattura Ctrl+C dall'utente
-    print("Interruzione manuale")  # notifica interruzione
-
-finally:  # sempre eseguito alla fine del try/except
-    plt.ioff()  # disabilita la modalità interattiva di matplotlib
-    plt.show()  # mostra la figura finale (utile se l'interactive è stato disattivato)
+# Avvio del programma
+if __name__ == "__main__":  # verifica se il modulo è eseguito direttamente
+    main()  # avvia la funzione principale

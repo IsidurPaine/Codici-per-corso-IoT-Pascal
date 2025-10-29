@@ -1,7 +1,7 @@
 #########################################################################################
 # Read data from serial port and send it to MQTT broker                                 #
 # author: Pietro Boccadoro                                                              #
-# email: pieroboccadoro13[at]gmail[dot]com                                              #   
+# email: pieroboccadoro13[at]gmail[dot]com                                              #
 # date: 2025-02-01                                                                      #
 # version: 0.1                                                                          #
 #                                                                                       #
@@ -22,7 +22,7 @@ import time # Importa la libreria time per gestire la temporizzazione delle oper
 import paho.mqtt.client as mqtt # Importa la libreria paho-mqtt per la comunicazione MQTT
 
 # Configurazione della porta seriale
-ser = serial.Serial('COM5', 9600)  # Sostituisci 'COM3' con la porta seriale corretta
+ser = serial.Serial('COM7', 9600)  # Sostituisci 'COM3' con la porta seriale corretta
 
 # Configurazione MQTT
 broker = "localhost" # Indirizzo del broker MQTT

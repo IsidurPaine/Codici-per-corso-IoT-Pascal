@@ -1,7 +1,7 @@
 #########################################################################################
 # Read data from serial port and send it to MQTT broker                                 #
 # author: Pietro Boccadoro                                                              #
-# email: pieroboccadoro13[at]gmail[dot]com                                              #   
+# email: pieroboccadoro13[at]gmail[dot]com                                              #
 # date: 2025-02-01                                                                      #
 # version: 0.12                                                                         #
 #                                                                                       #
@@ -22,7 +22,7 @@ import time # Importa la libreria time per gestire la temporizzazione delle oper
 import paho.mqtt.client as mqtt # Importa la libreria paho-mqtt per la comunicazione MQTT
 
 # Configurazione della porta seriale
-ser = serial.Serial('COM5', 9600)  # Sostituisci 'COM3' con la porta seriale corretta
+ser = serial.Serial('COM11', 9600)  # Sostituisci 'COM3' con la porta seriale corretta
 
 # Configurazione MQTT
 broker = "localhost" # Indirizzo del broker MQTT
@@ -55,11 +55,11 @@ try:
             # Leggi la linea dalla seriale
             line = ser.readline().decode('utf-8').rstrip() # Rimuovi i caratteri di newline e carriage return
             print(line) # Stampa la linea letta
-            # Controllo della stringa per mandare solo il dato di temperatura in gradi celsius
             
             line_humidity = line.split(", ")[0].split(" ")[1].split("%")[0]
             print(f"Umidità: {line_humidity} %") # Stampa l'umidità
 
+            # Controllo della stringa per mandare solo il dato di temperatura in gradi celsius
             # Dalla stringa ricevuta, estrai la parte della temperatura (primo slit)
             # da cui estraggo solo la parte in gradi celsius eliminando (secondo split)
             # il simbolo °C (terzo split)

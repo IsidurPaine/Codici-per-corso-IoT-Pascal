@@ -22,7 +22,7 @@ import time # Importa la libreria time per gestire la temporizzazione delle oper
 import paho.mqtt.client as mqtt # Importa la libreria paho-mqtt per la comunicazione MQTT
 
 # Configurazione della porta seriale
-ser = serial.Serial('COM5', 9600)  # Sostituisci 'COM3' con la porta seriale corretta
+ser = serial.Serial('COM11', 9600)  # Sostituisci 'COM3' con la porta seriale corretta
 
 # Configurazione MQTT
 broker = "localhost" # Indirizzo del broker MQTT
@@ -52,7 +52,7 @@ try:
             line = ser.readline().decode('utf-8').rstrip() # Rimuovi i caratteri di newline e carriage return
             print(line) # Stampa la linea letta
             # Controllo della stringa per mandare solo il dato di temperatura in gradi celsius
-            # Dalla stringa ricevuta, estrai la parte della temperatura (primo slit)
+            # Dalla stringa ricevuta, estrai la parte della temperatura (primo split)
             # da cui estraggo solo la parte in gradi celsius eliminando (secondo split)
             # il simbolo °C (terzo split)
             line_temperature_celsius = line.split(", ")[1].split(" ")[2].split("°")[0]
