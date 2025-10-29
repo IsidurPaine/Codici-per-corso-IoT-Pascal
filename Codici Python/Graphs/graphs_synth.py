@@ -9,6 +9,12 @@
 # Script Python per la generazione di dati sintetici simulando letture sensore e la     #
 # visualizzazione in tempo reale di grafici multipli utilizzando Matplotlib.            #
 # I dati simulati includono umidità, temperatura in Celsius e Fahrenheit, e IDC.        #
+#                                                                                       #
+# Funzionalità principali:                                                              #
+# - Generazione di dati sintetici basati su funzioni matematiche e rumore casuale.      #
+# - Visualizzazione in tempo reale di grafici multipli con aggiornamenti dinamici.      #
+# - Stampa dei dati generati sulla console.                                             #
+#                                                                                       #                                                                                       #
 #########################################################################################
 
 

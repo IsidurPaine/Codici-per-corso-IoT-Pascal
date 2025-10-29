@@ -1,11 +1,13 @@
 #########################################################################################
-# Read data from serial port and send it to MQTT broker                                 #
+# Read data from serial port                                                            #
+#                                                                                       #
 # author: Pietro Boccadoro                                                              #
 # email: pieroboccadoro13[at]gmail[dot]com                                              #
 # date: 2025-02-01                                                                      #
 # version: 0.1                                                                          #
 #                                                                                       #
-# Questo script legge i dati dalla porta seriale                                        #
+# Script Python per leggere i dati del sensore da una porta seriale                     #
+# collegata ad Arduino e stampare i valori sulla console.                               #
 #                                                                                       #
 # Per eseguire questo script, è necessario installare la libreria paho-mqtt e pyserial. #
 # Puoi installare le libreria eseguendo il seguente comando:                            #
@@ -21,7 +23,7 @@ import time # Importa la libreria time per gestire la temporizzazione delle oper
 # Configurazione della porta seriale
 ser = serial.Serial('COM5', 9600)  # Sostituisci 'COM3' con la porta seriale corretta
 
-# Leggi i dati dalla seriale e inviali al broker MQTT
+# Leggi i dati dalla seriale
 try:
     while True:
         if ser.in_waiting > 0:
@@ -29,7 +31,6 @@ try:
             line = ser.readline().decode('utf-8').rstrip() # Rimuovi i caratteri di newline e carriage return
             print(f"Temperatura: {line} C") # Stampa la temperatura
             
-            # Pubblica il messaggio MQTT
             time.sleep(1) # Ritardo di 1 secondo
 except KeyboardInterrupt:
     print("Interruzione manuale") # Stampa un messaggio di interruzione manuale
